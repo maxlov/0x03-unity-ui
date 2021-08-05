@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public Vector3 direction;
     public float speed;
 
+    private int score = 0;
+
     private void Start()
     {
         var gameplayActionMap = playerControls.FindActionMap("Player");
@@ -37,5 +39,15 @@ public class PlayerController : MonoBehaviour
         inputDirection = Vector2.ClampMagnitude(inputDirection, 1f);
 
         direction = new Vector3(inputDirection.x, 0f, inputDirection.y);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Pickup"))
+        {
+            score += 1;
+            Debug.Log("Score: " + score);
+            Destroy(other.gameObject);
+        }
     }
 }
