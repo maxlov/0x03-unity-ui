@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -29,6 +30,15 @@ public class PlayerController : MonoBehaviour
         movement.Enable();
     }
 
+    private void Update()
+    {
+        if (health <= 0)
+        {
+            Debug.Log("Game Over!");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
+
     void FixedUpdate()
     {
         rb.AddForce(direction * speed);
@@ -54,6 +64,10 @@ public class PlayerController : MonoBehaviour
         {
             health -= 1;
             Debug.Log("Health: " + health);
+        }
+        else if (other.CompareTag("Goal"))
+        {
+            Debug.Log("You win!");
         }
     }
 }
