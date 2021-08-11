@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private int health = 5;
 
     public Text scoreText;
+    public Text healthText;
 
     private void Start()
     {
@@ -86,6 +87,11 @@ public class PlayerController : MonoBehaviour
         scoreText.text = $"Score: {score}";
     }
 
+    void SetHealthText()
+    {
+        healthText.text = $"Health: {health}";
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Pickup"))
@@ -97,7 +103,7 @@ public class PlayerController : MonoBehaviour
         else if (other.CompareTag("Trap"))
         {
             health -= 1;
-            Debug.Log("Health: " + health);
+            SetHealthText();
         }
         else if (other.CompareTag("Goal"))
         {

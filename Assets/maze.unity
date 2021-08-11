@@ -5142,6 +5142,7 @@ MonoBehaviour:
   speed: 20
   multiplier: 3
   scoreText: {fileID: 99990533}
+  healthText: {fileID: 1605320}
 --- !u!96 &1128445099
 TrailRenderer:
   serializedVersion: 2
