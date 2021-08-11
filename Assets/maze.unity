@@ -4739,6 +4739,7 @@ MonoBehaviour:
     type: 3}
   rb: {fileID: 1128445096}
   speed: 20
+  multiplier: 3
 --- !u!96 &1128445099
 TrailRenderer:
   serializedVersion: 2

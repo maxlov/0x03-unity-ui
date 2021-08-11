@@ -9,12 +9,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] 
     InputActionAsset playerControls;
     InputAction movement;
+    InputAction charge;
 
     public Rigidbody rb;
 
     [System.NonSerialized]
     public Vector3 direction;
+    Vector3 lastDirection;
     public float speed;
+
+    [System.NonSerialized]
+    public float durationHeld;
+    bool isHeld = false;
+    public float multiplier;
 
     private int score = 0;
     private int health = 5;
@@ -24,10 +31,15 @@ public class PlayerController : MonoBehaviour
         var gameplayActionMap = playerControls.FindActionMap("Player");
 
         movement = gameplayActionMap.FindAction("Move");
+        charge = gameplayActionMap.FindAction("Charge");
 
         movement.performed += OnMovementChanged;
         movement.canceled += OnMovementChanged;
         movement.Enable();
+
+        charge.performed += chargeStart => { isHeld = true; };
+        charge.canceled += chargeRelease;
+        charge.Enable();
     }
 
     private void Update()
@@ -41,7 +53,11 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.AddForce(direction * speed);
+        if (!isHeld)
+            rb.AddForce(direction * speed);
+        else
+            durationHeld += 1;
+        Debug.Log(durationHeld);
     }
 
     private void OnMovementChanged(InputAction.CallbackContext context)
@@ -50,6 +66,17 @@ public class PlayerController : MonoBehaviour
         inputDirection = Vector2.ClampMagnitude(inputDirection, 1f);
 
         direction = new Vector3(inputDirection.x, 0f, inputDirection.y);
+        if (direction.magnitude > 0)
+            lastDirection = direction;
+    }
+
+    private void chargeRelease(InputAction.CallbackContext context)
+    {
+        
+
+        rb.AddForce(lastDirection * durationHeld * multiplier);
+        durationHeld = 0;
+        isHeld = false;
     }
 
     void OnTriggerEnter(Collider other)
