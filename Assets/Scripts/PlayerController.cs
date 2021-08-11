@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class PlayerController : MonoBehaviour
 
     private int score = 0;
     private int health = 5;
+
+    public Text scoreText;
 
     private void Start()
     {
@@ -57,7 +60,6 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(direction * speed);
         else
             durationHeld += 1;
-        Debug.Log(durationHeld);
     }
 
     private void OnMovementChanged(InputAction.CallbackContext context)
@@ -79,12 +81,17 @@ public class PlayerController : MonoBehaviour
         isHeld = false;
     }
 
+    void SetScoreText()
+    {
+        scoreText.text = $"Score: {score}";
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Pickup"))
         {
             score += 1;
-            Debug.Log("Score: " + score);
+            SetScoreText();
             Destroy(other.gameObject);
         }
         else if (other.CompareTag("Trap"))
