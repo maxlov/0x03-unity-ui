@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     InputActionAsset playerControls;
     InputAction movement;
     InputAction charge;
+    InputAction escape;
 
     public Rigidbody rb;
 
@@ -39,6 +40,7 @@ public class PlayerController : MonoBehaviour
 
         movement = gameplayActionMap.FindAction("Move");
         charge = gameplayActionMap.FindAction("Charge");
+        escape = gameplayActionMap.FindAction("Exit");
 
         movement.performed += OnMovementChanged;
         movement.canceled += OnMovementChanged;
@@ -47,6 +49,9 @@ public class PlayerController : MonoBehaviour
         charge.performed += chargeStart => { isHeld = true; };
         charge.canceled += chargeRelease;
         charge.Enable();
+
+        escape.performed += toMain => { SceneManager.LoadScene(0); };
+        escape.Enable();
     }
 
     private void Update()
@@ -66,7 +71,7 @@ public class PlayerController : MonoBehaviour
         if (!isHeld)
             rb.AddForce(direction * speed);
         else
-            durationHeld += 1;
+            durationHeld += 10;
     }
 
     private void OnMovementChanged(InputAction.CallbackContext context)
